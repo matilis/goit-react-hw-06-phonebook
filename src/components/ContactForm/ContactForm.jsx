@@ -1,30 +1,20 @@
-import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
 import css from './ContactForm.module.css';
 import PropTypes from 'prop-types';
 
-export const ContactForm = ({ onSubmit }) => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+export const ContactForm = () => {
+  const dispatch = useDispatch();
 
-  const handleChange = event => {
-    const { name, value } = event.target;
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-      default:
-        return;
-    }
-  };
+  const handleSubmit = e => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.elements.name.value;
+    const number = form.elements.number.value;
 
-  const handleSubmit = event => {
-    event.preventDefault();
-    onSubmit(name, number);
-    setName('');
-    setNumber('');
+    dispatch(addContact(name, number));
+
+    form.reset();
   };
 
   return (
@@ -38,8 +28,6 @@ export const ContactForm = ({ onSubmit }) => {
             pattern="^[a-zA-Z]+(([' \u2013][a-zA-Z])?[a-zA-Z]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
-            value={name}
-            onChange={handleChange}
             className={css.form__input}
             placeholder="Contact name"
           />
@@ -52,10 +40,8 @@ export const ContactForm = ({ onSubmit }) => {
             name="number"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
-            value={number}
-            onChange={handleChange}
-            className={css.form__input}
             placeholder="Contact number"
+            className={css.form__input}
           />
         </label>
 
