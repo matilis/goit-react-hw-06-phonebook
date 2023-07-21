@@ -1,7 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import css from './ContactList.module.css';
-import PropTypes from 'prop-types';
 import { deleteContact } from 'redux/contactsSlice';
+import css from './ContactList.module.css';
 
 const getVisibleContacts = (contacts, filteredContacts) => {
   if (filteredContacts === '') {
@@ -13,14 +12,14 @@ const getVisibleContacts = (contacts, filteredContacts) => {
   }
 };
 
-export const ContactList = () => {
+export const ContactList = ({ contact }) => {
   const contacts = useSelector(state => state.contacts);
   const filteredContacts = useSelector(state => state.filters);
   const visibleContacts = getVisibleContacts(contacts, filteredContacts);
 
   const dispatch = useDispatch();
 
-  const handleDelete = id => dispatch(deleteContact(id));
+  const handleDelete = () => dispatch(deleteContact(contact.id));
 
   return (
     <ul className={css.contacts}>
@@ -40,15 +39,4 @@ export const ContactList = () => {
       ))}
     </ul>
   );
-};
-
-ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      name: PropTypes.string.isRequired,
-      number: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onClick: PropTypes.func.isRequired,
 };
