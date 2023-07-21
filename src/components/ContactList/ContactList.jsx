@@ -12,14 +12,14 @@ const getVisibleContacts = (contacts, filteredContacts) => {
   }
 };
 
-export const ContactList = ({ contact }) => {
+export const ContactList = () => {
   const contacts = useSelector(state => state.contacts);
   const filteredContacts = useSelector(state => state.filters);
   const visibleContacts = getVisibleContacts(contacts, filteredContacts);
 
   const dispatch = useDispatch();
 
-  const handleDelete = () => dispatch(deleteContact(contact.id));
+  const handleDelete = id => dispatch(deleteContact(id));
 
   return (
     <ul className={css.contacts}>
@@ -30,7 +30,7 @@ export const ContactList = ({ contact }) => {
           <button
             type="button"
             value={contact.id}
-            onClick={handleDelete}
+            onClick={() => handleDelete(contact.id)}
             className={css.contacts__button}
           >
             Delete
